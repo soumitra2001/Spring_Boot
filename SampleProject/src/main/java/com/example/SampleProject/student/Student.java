@@ -3,19 +3,19 @@ package com.example.SampleProject.student;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Student {
     private int studentID;
 
-    private String fName;
+    private String firstName;
 
-    private String lName;
+    private String lastName;
 
-    private String phNo;
+    private String DOB;
 
     private String email;
+
 
 }

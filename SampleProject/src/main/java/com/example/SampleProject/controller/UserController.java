@@ -1,5 +1,6 @@
 package com.example.SampleProject.controller;
 
+import com.example.SampleProject.student.Student;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
@@ -13,13 +14,13 @@ public class UserController {
     }
 
     @PostMapping(value="/user")
-    public String setUserInfo(@RequestBody String data) {
-        JSONObject obj = new JSONObject(data);
-        String name=obj.getString("name");
-        int age=obj.getInt("age");
-        String email=obj.getString("email");
-        System.out.println("Name: "+name+" Age: "+age+" email: "+email);
-        return "Value is => "+data;
+    public String setUserInfo(@RequestBody Student info) {
+        String fName=info.getFirstName();
+        String lName=info.getLastName();
+        int id=info.getStudentID();
+        String email=info.getEmail();
+        System.out.println(fName+"  "+lName+"    "+id+"    "+email);
+        return "Value is => "+info;
     }
 
     @PutMapping(value="/user")
