@@ -1,4 +1,4 @@
-package com.geekster.RandomJokes.controller;
+package com.geekster.RandomJokes.GetRandomJokes;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
