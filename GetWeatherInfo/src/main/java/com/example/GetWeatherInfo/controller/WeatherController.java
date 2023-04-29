@@ -16,6 +16,7 @@ public class WeatherController {
         URL getURL = new URL("https://api.open-meteo.com/v1/forecast?latitude=22.65&longitude=88.45&current_weather=true");
 
         HttpURLConnection connection =(HttpURLConnection) getURL.openConnection();
+        connection.setRequestMethod("GET");
 
         int statusCode=connection.getResponseCode();
 
