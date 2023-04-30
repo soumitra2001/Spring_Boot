@@ -1,11 +1,13 @@
 package com.supriya.SpringAnnotations.Controller;
 
-import com.supriya.SpringAnnotations.Teacher;
+import TestComponentScan.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@ComponentScan(basePackages = {"TestComponentScan"})
 public class TeacherController {
 
     @Autowired

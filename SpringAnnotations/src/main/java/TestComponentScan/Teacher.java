@@ -1,4 +1,4 @@
-package com.supriya.SpringAnnotations;
+package TestComponentScan;
 
 import org.springframework.stereotype.Component;
 
