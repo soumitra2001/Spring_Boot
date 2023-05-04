@@ -24,7 +24,7 @@ public class User {
     @Pattern(regexp = "[0-9]+")
     private String age;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_addressId")
     private Address userAddress;
 }

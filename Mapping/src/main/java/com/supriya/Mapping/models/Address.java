@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -23,7 +24,7 @@ public class Address {
     @Pattern(regexp = "[A-Za-z]+\\D[0-9]+")
     private String houseNo;
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "userAddress")
-    private User user;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "userAddress")
+    private List<User> user;
 
 }
