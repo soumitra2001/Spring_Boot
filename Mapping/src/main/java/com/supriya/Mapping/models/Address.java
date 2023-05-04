@@ -23,4 +23,7 @@ public class Address {
     @Pattern(regexp = "[A-Za-z]+\\D[0-9]+")
     private String houseNo;
 
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "userAddress")
+    private User user;
+
 }

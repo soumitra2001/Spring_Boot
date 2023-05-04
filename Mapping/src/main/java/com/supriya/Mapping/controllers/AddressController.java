@@ -5,6 +5,7 @@ import com.supriya.Mapping.services.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +20,7 @@ public class AddressController {
     }
 
     @PostMapping(value = "/address")
-    public String addAddress(@RequestBody Address address){
+    public String addAddress(@Valid @RequestBody Address address){
         return service.addAddress(address);
     }
 
