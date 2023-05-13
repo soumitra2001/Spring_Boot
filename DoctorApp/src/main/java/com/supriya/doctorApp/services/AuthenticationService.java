@@ -7,6 +7,8 @@ import com.supriya.doctorApp.repositories.ITokenRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AuthenticationService {
 
@@ -22,4 +24,13 @@ public class AuthenticationService {
         return  iTokenRepo.findByPatient(patient);
 
     }
+
+    public boolean authenticate(String userEmail, String token) {
+
+        AuthenticationToken authToken = iTokenRepo.findFirstByToken(token);//find token object via token string
+        String expectedEmail = authToken.getPatient().getPatientEmail();
+        return expectedEmail.equals(userEmail);
+
+    }
+
 }

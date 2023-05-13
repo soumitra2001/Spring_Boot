@@ -1,11 +1,9 @@
 package com.supriya.doctorApp.models;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import javax.swing.*;
 
 @Data
 @NoArgsConstructor
@@ -14,13 +12,15 @@ import javax.swing.*;
 public class Appointment {
 
     @Id
-    @EmbeddedId
+    @Embedded
     private AppointmentKey appointmentKey;
 
     @ManyToOne
     @JoinColumn(name = "fk_doctor_id")
     private Doctor doctor;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
+    @JoinColumn(name = "fk_patient_id")
     private Patient patient;
+
 }

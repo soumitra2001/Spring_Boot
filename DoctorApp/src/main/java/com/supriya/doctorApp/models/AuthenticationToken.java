@@ -1,9 +1,10 @@
 package com.supriya.doctorApp.models;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -19,7 +20,7 @@ public class AuthenticationToken {
     private String token;
     private LocalDate tokenCreationDate;
 
-    @OneToOne()
+    @OneToOne
     @JoinColumn(nullable = false, name = "fk_patient_id")
     private Patient patient;
 

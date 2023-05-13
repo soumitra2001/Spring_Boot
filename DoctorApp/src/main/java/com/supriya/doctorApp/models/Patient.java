@@ -3,11 +3,11 @@ package com.supriya.doctorApp.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
 
 @Data
 @NoArgsConstructor
@@ -35,6 +35,6 @@ public class Patient {
         this.patientContact = patientContact;
     }
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "patient")
-    private Appointment appointment;
+//    @OneToOne(cascade = CascadeType.ALL,mappedBy = "patient")
+//    private Appointment appointment;
 }

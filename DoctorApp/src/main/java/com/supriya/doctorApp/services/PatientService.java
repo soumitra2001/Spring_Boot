@@ -5,15 +5,15 @@ import com.supriya.doctorApp.dto.SignInInput;
 import com.supriya.doctorApp.dto.SignInOutput;
 import com.supriya.doctorApp.dto.SignUpInput;
 import com.supriya.doctorApp.dto.SignUpOutput;
-import com.supriya.doctorApp.models.AuthenticationToken;
-import com.supriya.doctorApp.models.Patient;
+import com.supriya.doctorApp.models.*;
 import com.supriya.doctorApp.repositories.IPatientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
 
 @Service
 public class PatientService {
@@ -25,8 +25,11 @@ public class PatientService {
     @Autowired
     AuthenticationService tokenService;
 
+    @Autowired
+    AppointmentService appointmentService;
 
-
+    @Autowired
+    DoctorService doctorService;
 
     public SignUpOutput signUp(SignUpInput signUpDto) {
 
@@ -72,11 +75,11 @@ public class PatientService {
         md5.update(userPassword.getBytes());
         byte[] digested =  md5.digest();
 
-        String hash = DatatypeConverter.printHexBinary(digested);
 
-        //For direct convert into string =>
-        //  String hash = new String(digested);
-
+        String hash=null;
+        for(byte i:digested){
+            hash+=String.format("%02X",i);
+        }
         return hash;
     }
 
@@ -121,9 +124,22 @@ public class PatientService {
 
         //set up output response
 
-        return new SignInOutput("Authentication Successful..!!!",authToken.getToken());
+        return new SignInOutput("Authentication Successfull !!!",authToken.getToken());
 
 
+    }
 
+    public List<Doctor> getAllDoctors() {
+        return doctorService.getAllDoctors();
+    }
+
+    public void cancelAppointment(AppointmentKey key) {
+
+        appointmentService.cancelAppointment(key);
+
+    }
+
+    public boolean isValidKey(AppointmentKey key) {
+        return appointmentService.checkValidKey(key);
     }
 }
