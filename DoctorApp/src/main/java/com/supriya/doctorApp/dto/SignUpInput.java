@@ -1,18 +1,26 @@
 package com.supriya.doctorApp.dto;
 
-
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class SignUpInput {
 
+    @NotBlank
+    @Pattern(regexp = "[A-Z][a-z]+")
     private String userFirstName;
+
+    @NotBlank
+    @Pattern(regexp = "[A-Z][a-z]+")
     private String userLastName;
-    private String userEmail;
+
+    @NotBlank
+    @Email(message = "Not a valid email...!")
+    private  String userEmail;
+
+    @NotBlank
+    @Pattern(regexp = "[a-z\\D0-9]+")
     private String userPassword;
-    private String userContact;
 }

@@ -1,27 +1,20 @@
 package com.supriya.doctorApp.controllers;
 
-
 import com.supriya.doctorApp.models.Appointment;
 import com.supriya.doctorApp.services.AppointmentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("appointment")
+@RequestMapping("/appointment")
 public class AppointmentController {
 
     @Autowired
     AppointmentService appointmentService;
 
-    @PostMapping("/")
-    public void bookAppointment(@RequestBody Appointment appointment)
-    {
-        appointmentService.bookAppointment(appointment);
+    @PostMapping("/patient")
+    public String bookAppointment(@PathVariable String token, @Valid @RequestBody Appointment appointment){
+        return appointmentService.bookAppointment(token,appointment);
     }
-
-
-
 }

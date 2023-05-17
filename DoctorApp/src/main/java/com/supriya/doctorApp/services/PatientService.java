@@ -1,145 +1,107 @@
 package com.supriya.doctorApp.services;
 
-
 import com.supriya.doctorApp.dto.SignInInput;
 import com.supriya.doctorApp.dto.SignInOutput;
 import com.supriya.doctorApp.dto.SignUpInput;
 import com.supriya.doctorApp.dto.SignUpOutput;
-import com.supriya.doctorApp.models.*;
+import com.supriya.doctorApp.models.AuthenticationToken;
+import com.supriya.doctorApp.models.Doctor;
+import com.supriya.doctorApp.models.Patient;
 import com.supriya.doctorApp.repositories.IPatientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-
 @Service
 public class PatientService {
 
     @Autowired
-    IPatientRepo iPatientRepo;
-
+    IPatientRepo patientRepo;
 
     @Autowired
     AuthenticationService tokenService;
 
     @Autowired
-    AppointmentService appointmentService;
-
-    @Autowired
     DoctorService doctorService;
+    public SignUpOutput signUp(SignUpInput signUpInput) {
+        // First check if this patient already registered or not
+        Patient patient = patientRepo.findByPatientEmail(signUpInput.getUserEmail());
 
-    public SignUpOutput signUp(SignUpInput signUpDto) {
-
-        //check if user exists or not based on email
-        Patient patient = iPatientRepo.findFirstByPatientEmail(signUpDto.getUserEmail());
-
-        if(patient != null)
-        {
-            throw new IllegalStateException("Patient already exists!!!!...sign in instead");
+        if(patient!=null){
+            throw new IllegalArgumentException("Patient already exist..SignIn instead");
         }
 
-
-        //encryption
+        // Encrypted the password
         String encryptedPassword = null;
         try {
-            encryptedPassword = encryptPassword(signUpDto.getUserPassword());
-        } catch (NoSuchAlgorithmException e) {
+            encryptedPassword = encryptMyPassword(signUpInput.getUserPassword());
+        }catch (Exception e){
             e.printStackTrace();
-
         }
 
-        //save the user
+        patient=new Patient(signUpInput.getUserFirstName(),
+                signUpInput.getUserLastName(),
+                signUpInput.getUserEmail(),
+                encryptedPassword);
 
-        patient = new Patient(signUpDto.getUserFirstName(),
-                signUpDto.getUserLastName(),signUpDto.getUserEmail(),
-                encryptedPassword, signUpDto.getUserContact());
-
-        iPatientRepo.save(patient);
-
-        //token creation and saving
+        patientRepo.save(patient);
 
         AuthenticationToken token = new AuthenticationToken(patient);
 
         tokenService.saveToken(token);
 
-        return new SignUpOutput("Patient registered","Patient created successfully");
-
-
+        return new SignUpOutput("Patient's signup successful..!", HttpStatus.ACCEPTED);
     }
 
-    private String encryptPassword(String userPassword) throws NoSuchAlgorithmException {
+    private String encryptMyPassword(String userPassword) throws NoSuchAlgorithmException {
         MessageDigest md5 = MessageDigest.getInstance("MD5");
         md5.update(userPassword.getBytes());
-        byte[] digested =  md5.digest();
+        byte[] digestedPass = md5.digest();
 
-
-        String hash=null;
-        for(byte i:digested){
-            hash+=String.format("%02X",i);
+        String encryptPassword = null;
+        for (byte val:digestedPass){
+            encryptPassword += String.format("%02X",val);
         }
-        return hash;
+        return encryptPassword;
     }
 
+    public SignInOutput signIn(SignInInput signInInput) throws IllegalAccessException{
+        //First check any patient is present or not corresponding the email
+        Patient patient = patientRepo.getByPatientEmail(signInInput.getUserEmail());
 
-    public SignInOutput signIn(SignInInput signInDto) {
-
-        //get email
-
-        Patient patient = iPatientRepo.findFirstByPatientEmail(signInDto.getPatientEmail());
-
-        if(patient == null)
-        {
-            throw new IllegalStateException("User invalid!!!!...sign up instead");
+        if(patient==null){
+            throw new IllegalAccessException("User invalid!!...SignUp instead");
         }
 
-        //encrypt the password
-
-        String encryptedPassword = null;
-
+        //Now check the Password is correct or not
+        String encryptedPassword =null;
         try {
-            encryptedPassword = encryptPassword(signInDto.getPatientPassword());
-        }
-        catch (NoSuchAlgorithmException e) {
+            encryptedPassword=encryptMyPassword(signInInput.getUserPassword());
+        }catch (NoSuchAlgorithmException e){
             e.printStackTrace();
-
         }
 
-
-
-        //match it with database encrypted password
-
-        boolean isPasswordValid = encryptedPassword.equals(patient.getPatientPassword());
-
-        if(!isPasswordValid)
-        {
-            throw new IllegalStateException("User invalid!!!!...sign up instead");
+        boolean isCorrectPassword=patient.getPatientPassword().equals(encryptedPassword);
+        if(!isCorrectPassword){
+            throw new IllegalAccessException("User Invalid!!...SignUp instead");
         }
 
-        //figure out the token
+        AuthenticationToken token=tokenService.getTokenByPatient(patient);
 
-        AuthenticationToken authToken = tokenService.getToken(patient);
-
-        //set up output response
-
-        return new SignInOutput("Authentication Successfull !!!",authToken.getToken());
-
-
+        return new SignInOutput("Patient's logIn successful..",token.getToken());
     }
 
-    public List<Doctor> getAllDoctors() {
-        return doctorService.getAllDoctors();
+    public List<Doctor> findAvailableDoctors(String token){
+        boolean isTokenPresent=tokenService.findThisToken(token);
+        if(!isTokenPresent){
+            throw new IllegalStateException("User Invalid!!..");
+        }
+
+        return doctorService.getAllDoctor();
     }
 
-    public void cancelAppointment(AppointmentKey key) {
-
-        appointmentService.cancelAppointment(key);
-
-    }
-
-    public boolean isValidKey(AppointmentKey key) {
-        return appointmentService.checkValidKey(key);
-    }
 }

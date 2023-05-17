@@ -1,11 +1,11 @@
 package com.supriya.doctorApp.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -15,11 +15,13 @@ public class Doctor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer doctorId;
-    private String doctorName;
-    @Enumerated(EnumType.STRING)
-    private Specialization specialization;
+    private Long doctorId;
 
-    @OneToMany(mappedBy = "doctor")
-    private List<Appointment> appointments;
+    @NotBlank
+    @Pattern(regexp = "[A-Z][A-Za-z\\D]+")
+    private String doctorName;
+
+    @Enumerated(value = EnumType.STRING)
+    private Specialization doctorSpecialization;
+
 }

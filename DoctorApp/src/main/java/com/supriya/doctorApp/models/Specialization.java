@@ -1,10 +1,12 @@
 package com.supriya.doctorApp.models;
 
 public enum Specialization {
-
-    ENT,
     ORTHO,
-    GYNO,
     NEURO,
-    DERMO
+    CARDIO,
+    GYNO,
+    DERMATO,
+    DENTIST,
+    RADIO,
+    PHYSIO
 }

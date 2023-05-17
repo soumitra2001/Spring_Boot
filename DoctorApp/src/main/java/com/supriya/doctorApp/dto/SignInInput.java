@@ -1,15 +1,18 @@
 package com.supriya.doctorApp.dto;
 
-
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class SignInInput {
 
-    private String patientEmail;
-    private String patientPassword;
+    @NotBlank
+    @Email
+    private String userEmail;
+
+    @NotBlank
+    @Pattern(regexp = "[a-z\\D0-9]+")
+    private String userPassword;
 }

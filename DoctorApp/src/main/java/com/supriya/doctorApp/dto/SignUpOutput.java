@@ -2,13 +2,15 @@ package com.supriya.doctorApp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class SignUpOutput {
 
-    String status;
-    String message;
+    @Nullable
+    public String message;
+
+    public HttpStatus status;
 }

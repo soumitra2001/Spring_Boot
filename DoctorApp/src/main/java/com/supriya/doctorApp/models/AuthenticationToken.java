@@ -1,32 +1,34 @@
 package com.supriya.doctorApp.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-
-@Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
 public class AuthenticationToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tokenId;
+    private Long authenticationId;
+
     private String token;
-    private LocalDate tokenCreationDate;
+
+    private LocalDate tokenGenerationTime;
 
     @OneToOne
-    @JoinColumn(nullable = false, name = "fk_patient_id")
     private Patient patient;
 
-    public AuthenticationToken(Patient patient) {
-        this.patient = patient;
-        this.tokenCreationDate = LocalDate.now();
-        this.token = UUID.randomUUID().toString();
+    public AuthenticationToken(Patient patient){
+        this.patient=patient;
+        this.tokenGenerationTime=LocalDate.now();
+        this.token= UUID.randomUUID().toString();
     }
+
 }

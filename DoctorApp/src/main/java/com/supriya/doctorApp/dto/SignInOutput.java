@@ -1,15 +1,16 @@
 package com.supriya.doctorApp.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class SignInOutput {
 
-    private String status;
+    @Nullable
+    private String message;
+
     private String token;
+
 }
